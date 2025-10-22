@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerWrapTrigger : MonoBehaviour {
     public Transform ReturnLocation;
     public GameObject Car;
+    public bool Inverted = false;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start() {
