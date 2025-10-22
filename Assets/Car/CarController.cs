@@ -8,9 +8,8 @@ public class CarController : MonoBehaviour
     private Rigidbody rb;
 
     public float FollowSpeed = 31;
-    public float TurnSpeed = 16;
-    public float KP = 1f;
     public GameObject Player;
+    public float StartWaitTime = 3.0f;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,19 +22,8 @@ public class CarController : MonoBehaviour
     private bool run = false;
 
     IEnumerator toggler() {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(StartWaitTime);
         run = true;
-    }
-
-    float angularError() {
-        var rot = transform.rotation.eulerAngles.y;
-        var desiredVec = Player.transform.position - transform.position;
-        var desired = MathF.Atan2(desiredVec.z, desiredVec.x);
-        return desired - rot;
-    }
-
-    float angularControl() {
-        return KP * angularError();
     }
 
     // Update is called once per frame
