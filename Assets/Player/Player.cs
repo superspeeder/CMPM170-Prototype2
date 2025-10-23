@@ -2,6 +2,7 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 
 public class Player : MonoBehaviour {
@@ -21,13 +22,24 @@ public class Player : MonoBehaviour {
     public GameObject ProjectilePrefab;
     public float ShootForce;
     public bool InJumpPadZone = false;
+    [Header("Audio Settings")]
+    public AudioClip runningSound;
+    public float runningVolume = 0.6f;
+    public float fadeInTime = 0.3f;
+    public float fadeOutTime = 0.5f;
+    public float minSpeedThreshold = 2f; // Minimum speed to trigger running sound
 
     private Vector3 velocity;
 
     private CharacterController characterController;
 
+    private AudioSource audioSource;
+
     private bool isJumping = false;
     private bool canJump = false;
+    private bool isRunning = false;
+    private bool wasRunning = false;
+    private Coroutine fadeCoroutine;
 
     private void Start() {
         Cursor.lockState = CursorLockMode.Locked;
@@ -38,7 +50,107 @@ public class Player : MonoBehaviour {
         InteractAction.Enable();
 
         characterController = GetComponent<CharacterController>();
+        SetupAudio();
     }
+
+    void SetupAudio()
+    {
+        // Add AudioSource component if it doesn't exist
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        
+        // Configure AudioSource for running sound
+        audioSource.clip = runningSound;
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 0f; // 2D sound (not positional)
+        audioSource.volume = 0f; // Start silent
+        audioSource.pitch = 1f;
+    }
+
+    void CheckRunning()
+    {
+        if (audioSource == null || runningSound == null) return;
+        
+        // Calculate horizontal speed
+        float horizontalSpeed = new Vector2(velocity.x, velocity.z).magnitude;
+        
+        // Determine if player is running
+        isRunning = horizontalSpeed > minSpeedThreshold && characterController.isGrounded;
+        
+        // Handle audio transitions
+        if (isRunning && !wasRunning)
+        {
+            // Started running - fade in
+            StartRunningSound();
+        }
+        else if (!isRunning && wasRunning)
+        {
+            // Stopped running - fade out
+            StopRunningSound();
+        }
+        
+        // Update pitch based on speed for more dynamic sound
+        if (isRunning)
+        {
+            float speedFactor = Mathf.Clamp01(horizontalSpeed / MaxSpeed);
+            audioSource.pitch = Mathf.Lerp(0.8f, 1.2f, speedFactor);
+        }
+        
+        wasRunning = isRunning;
+    }
+
+    void StartRunningSound()
+    {
+         if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+        
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
+        
+        fadeCoroutine = StartCoroutine(FadeAudio(audioSource.volume, runningVolume, fadeInTime));
+    }
+
+    void StopRunningSound()
+    {
+        if (fadeCoroutine != null)
+        {
+            StopCoroutine(fadeCoroutine);
+        }
+        
+        fadeCoroutine = StartCoroutine(FadeAudio(audioSource.volume, 0f, fadeOutTime));
+    }
+
+    IEnumerator FadeAudio(float startVolume, float targetVolume, float duration)
+    {
+        float elapsed = 0f;
+        
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+            audioSource.volume = Mathf.Lerp(startVolume, targetVolume, t);
+            yield return null;
+        }
+        
+        audioSource.volume = targetVolume;
+        
+        // Stop audio if volume reaches 0
+        if (targetVolume <= 0f && audioSource.isPlaying)
+        {
+            audioSource.Stop();
+        }
+        
+        fadeCoroutine = null;
+    }
+
 
     private void Update() {
         var lookInput = LookAction.ReadValue<Vector2>().normalized *
@@ -59,6 +171,8 @@ public class Player : MonoBehaviour {
         if (canJump && JumpAction.IsPressed()) {
             isJumping = true;
         }
+
+        CheckRunning();
 
         // if (InteractAction.WasPressedThisFrame()) {
         //     if (Physics.Raycast(
