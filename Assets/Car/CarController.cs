@@ -98,6 +98,8 @@ public class CarController : MonoBehaviour
     private void OnCollisionEnter(Collision other) {
         if (other.gameObject.CompareTag("Player")) {
             // TODO: death
+            other.gameObject.GetComponent<Player>().enabled = false;
+            GameObject.Find("GameOver").GetComponent<Canvas>().enabled = true;
         }
     }
 }
