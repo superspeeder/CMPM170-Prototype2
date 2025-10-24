@@ -18,15 +18,18 @@ public class CarController : MonoBehaviour
     public float minVolume = 0.1f;
     public float maxDistance = 50f; // Distance at which sound becomes very quiet
     public float minDistance = 5f; // Distance at which sound is loudest
+    public bool DisableAutoControl = false;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        if (!DisableAutoControl) {
+            rb = GetComponent<Rigidbody>();
+            StartCoroutine(toggler());
+        }
 
         SetupAudio();
 
-        StartCoroutine(toggler());
     }
 
     void SetupAudio()
@@ -85,6 +88,7 @@ public class CarController : MonoBehaviour
     }
 
     void FixedUpdate() {
+        if (DisableAutoControl) return;
         if (!run) return;
 
         rb.maxLinearVelocity = FollowSpeed;
@@ -96,6 +100,7 @@ public class CarController : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision other) {
+        if (DisableAutoControl) return;
         if (other.gameObject.CompareTag("Player")) {
             // TODO: death
             other.gameObject.GetComponent<Player>().enabled = false;
