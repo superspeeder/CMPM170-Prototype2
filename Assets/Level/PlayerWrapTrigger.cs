@@ -1,30 +1,26 @@
-using System;
 using UnityEngine;
 
-public class PlayerWrapTrigger : MonoBehaviour {
+public class PlayerWrapTrigger : MonoBehaviour
+{
     public Transform ReturnLocation;
-    public GameObject Car;
-    public bool Inverted = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() {
-    }
-
-    // Update is called once per frame
-    void Update() {
-    }
-
-    void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player")) {
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
             var cc = other.GetComponent<CharacterController>();
+
+            if (cc == null)
+            {
+                return;
+            }
+
+            float newZ = ReturnLocation.position.z - (transform.position.z - other.transform.position.z);
+            Vector3 newPosition = new Vector3(other.transform.position.x, other.transform.position.y, newZ);
+
             cc.enabled = false;
-            other.transform.position = new Vector3(other.transform.position.x, other.transform.position.y,
-                ReturnLocation.position.z - (transform.position.z - other.transform.position.z));
+            other.transform.position = newPosition;
             cc.enabled = true;
-            
-            var carpos = new Vector3(Car.transform.position.x, Car.transform.position.y, ReturnLocation.position.z - (transform.position.z - Car.transform.position.z));
-            Car.transform.position = carpos;
-            Car.GetComponent<Rigidbody>().position = carpos;
         }
     }
 }

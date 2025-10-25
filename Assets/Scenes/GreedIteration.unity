@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 76894217}
   - component: {fileID: 76894219}
   - component: {fileID: 76894218}
+  - component: {fileID: 76894221}
   m_Layer: 0
   m_Name: TexturedCar
   m_TagString: Untagged
@@ -553,6 +554,19 @@ MonoBehaviour:
   maxDistance: 50
   minDistance: 5
   DisableAutoControl: 1
+--- !u!114 &76894221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 76894212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827bd1cdde83152438aaef84f575ff39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarCollision
+  score: 0
 --- !u!1 &334365118
 GameObject:
   m_ObjectHideFlags: 0
@@ -1070,6 +1084,57 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 745704256}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &752290569
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 752290571}
+  - component: {fileID: 752290570}
+  m_Layer: 0
+  m_Name: Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &752290570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752290569}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0b2f1b2235bd6242a3c9571fda26858, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Spawner
+  enemyPrefab: {fileID: 834198908}
+  numberOfEnemies: 10
+  minX: -20
+  maxX: 20
+  minZ: -150
+  maxZ: 150
+  spawnHeightY: 1.5
+--- !u!4 &752290571
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 752290569}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -169.05074, y: 0, z: 84.50623}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &784220645
 GameObject:
   m_ObjectHideFlags: 0
@@ -1255,6 +1320,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &834198908 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4675554283181191465, guid: 8d59150732fb46a4692c3bbfe7f69122, type: 3}
+  m_PrefabInstance: {fileID: 5017378214495066984}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &920059838
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1817,8 +1887,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWrapTrigger
   ReturnLocation: {fileID: 1220520030}
-  Car: {fileID: 76894212}
-  Inverted: 0
 --- !u!1001 &1461560492
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2588,8 +2656,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerWrapTrigger
   ReturnLocation: {fileID: 621426730}
-  Car: {fileID: 76894212}
-  Inverted: 0
 --- !u!65 &2140538880
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2634,6 +2700,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1193849532055699484, guid: 8d59150732fb46a4692c3bbfe7f69122, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1193849532055699484, guid: 8d59150732fb46a4692c3bbfe7f69122, type: 3}
       propertyPath: runningSound
       value: 
@@ -2900,6 +2970,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4675554283181191465, guid: 8d59150732fb46a4692c3bbfe7f69122, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8689031713296332028, guid: 8d59150732fb46a4692c3bbfe7f69122, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9082519764494568296, guid: 8d59150732fb46a4692c3bbfe7f69122, type: 3}
@@ -2963,3 +3037,4 @@ SceneRoots:
   - {fileID: 635977743}
   - {fileID: 2033126014}
   - {fileID: 334365121}
+  - {fileID: 752290571}

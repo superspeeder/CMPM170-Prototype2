@@ -155,6 +155,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
   FollowSpeed: 31
-  TurnSpeed: 16
-  KP: 1
   Player: {fileID: 0}
+  StartWaitTime: 3
+  LaughingSound: {fileID: 0}
+  maxVolume: 0.8
+  minVolume: 0.1
+  maxDistance: 50
+  minDistance: 5
+  DisableAutoControl: 0

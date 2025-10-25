@@ -92,7 +92,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2646064367643796781}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &4300537561641588246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,6 +395,11 @@ MonoBehaviour:
   ProjectilePrefab: {fileID: 0}
   ShootForce: 0
   InJumpPadZone: 0
+  runningSound: {fileID: 0}
+  runningVolume: 0.6
+  fadeInTime: 0.3
+  fadeOutTime: 0.5
+  minSpeedThreshold: 2
 --- !u!1 &8689031713296332028
 GameObject:
   m_ObjectHideFlags: 0
